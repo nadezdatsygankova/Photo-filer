@@ -1,52 +1,81 @@
 
 
 
-// next img
-let now = new Date();
-let currenthour = now.getHours();
-alert(now.getHours());
-
-const base = 'https://github.com/rolling-scopes-school/stage1-tasks/tree/assets/images/';
-
-const images = ['01.jpg', '02.jpg', '03.jpg', '05.jpg', '06.jpg', '07.jpg', '08.jpg', '09.jpg', '10.jpg', '11.jpg', '12.jpg', '13.jpg', '14.jpg', '15.jpg', '16.jpg', '17.jpg', '18.jpg', '19.jpg', '20.jpg'];
+const inputs = document.querySelectorAll('.filters input');
 
 
-function dateTime() {
-    let timeday = "";
-    if (currenthour > 0 && currenthour < 6) {
-        timeday = "night";
-    }
-    else if (currenthour > 5 && currenthour < 12) {
-        timeday = "morning";
-    }
-    else if (currenthour > 11 && currenthour < 18) {
-        timeday = "day";
-    }
-    else if (currenthour > 17 && currenthour < 24) {
-        timeday = "evening";
-    }
-    return timeday;
+function handleUpdate(){
+    const suffix = this.dataset.sizing || '';
+
+    document.documentElement.style.setProperty(`--${this.name}`,this.value +suffix);
 }
 
 
-let i = 0;
+inputs.forEach(input => input.addEventListener('change',handleUpdate));
+inputs.forEach(input => input.addEventListener('mousemove',handleUpdate));
+
+const reset = document.querySelector('.btn-reset');
+let r = document.querySelector(':root');
+
+
+
+
+reset.addEventListener('click', (event) =>{
+       r.style.setProperty('--blur', '0px');
+       r.style.setProperty('--spacing', '10px');
+       r.style.setProperty('--sepia', '0%');
+       r.style.setProperty('--saturate', '100%');
+       r.style.setProperty('--huerotate', '0deg');
+       r.style.setProperty('--base', 'ffc600');
+
+       document.getElementsByName("blur")[0].value='0';
+       document.getElementsByName("spacing")[0].value = "10";
+       document.getElementsByName("sepia")[0].value = "0";
+       document.getElementsByName("saturate")[0].value = "100";
+       document.getElementsByName("huerotate")[0].value = "0";
+       document.getElementsByName("base")[0].value = "#ffc600";
+
+})
+
+
+
+
+const full = document.querySelector('.fullscreen');
+let element = document.getElementById("all");
+
+full.addEventListener('click', (event) => {
+    openFullscreen();
+});
+
+full.addEventListener('click', (event) => {
+    closeFullscreen();
+});
+
+function openFullscreen() {
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    }
+}
+
+function closeFullscreen() {
+    document.exitFullscreen();
+}
+
+
+
 const img = document.querySelector('img');
-const btn = document.querySelector('.btn-next');
-console.log(btn);
+const btn = document.querySelector('.btn-load--input');
+const realFileBtn = document.getElementById("real-file");
 
-function viewBgImage(src) {
-    img.onload = () => {
-        img.src = `url(${src})`;
-    };
-}
 
-function getImage() {
-    const index = i % images.length;
-    let dataDays = dateTime();
-    const imageSrc = base + dataDays + images[index];
-    viewBgImage(imageSrc);
-    i++;
-    btn.disabled = true;
-    setTimeout(function () { btn.disabled = false }, 1000);
-}
-btn.addEventListener('click', getImage);
+
+btn.addEventListener('click',function(){
+    realFileBtn.click();
+});
+
+realFileBtn.addEventListener("change",function(){
+    if(realFileBtn.value){
+        img.src = URL.createObjectURL(realFileBtn.files[0]);
+    }
+})
+
