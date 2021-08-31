@@ -1,1 +1,1 @@
-# stage1-tasks
+https://nadezdatsygankova.github.io/photo-filer/
